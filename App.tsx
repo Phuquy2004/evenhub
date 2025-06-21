@@ -6,23 +6,29 @@
  */
 
 import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { use, useEffect, useState } from 'react';
+import { StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { SplashScreen } from './src/screnns';
+import MainNavigator from './src/navigators/MainNavigator';
+import AuthNavigator from './src/navigators/AuthNavigator';
+import { NavigationContainer } from '@react-navigation/native';
+
 
 function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
+  const [isShowSplash, setIsShowSplash] = useState(true);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsShowSplash(false);
+    }
+    , 1500); 
+    return () => clearTimeout(timeout);
+  }, [])
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NewAppScreen templateFileName="App.tsx" />
-    </View>
-  );
+    isShowSplash ? <SplashScreen /> : <NavigationContainer>
+      <AuthNavigator />
+    </NavigationContainer>
+
+  )
+
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-
 export default App;
